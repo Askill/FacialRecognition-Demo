@@ -6,7 +6,7 @@ import json
 from application.db import Session, Person, Fingerprint
 
 class PersonList(Resource):
-    def post(self, id):
+    def post(self, id = None):
         """  """
         try:
             data = ""
@@ -15,7 +15,7 @@ class PersonList(Resource):
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 400)
 
-    def get(self, id):
+    def get(self, id = None):
         """  """
         try:
             session = Session()
@@ -23,7 +23,6 @@ class PersonList(Resource):
             person = Person(fname="hi", fingerprints=[fingerprint])
             session.add(fingerprint)
             session.add(person)
-            
             session.commit()
 
             data = list(session.query(Person).all())
@@ -37,7 +36,7 @@ class PersonList(Resource):
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 400)
 
-    def put(self, id):
+    def put(self, id = None):
         """  """
         try:
             data = ""
@@ -46,7 +45,7 @@ class PersonList(Resource):
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 400)
 
-    def delete(self, id):
+    def delete(self, id = None):
         """  """
         try:
             data = ""
