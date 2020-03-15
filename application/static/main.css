@@ -1,0 +1,23 @@
+.demo{
+    max-width: 60%;
+    min-width: 100px;
+    padding: 20px;
+}
+
+.container{
+    padding:0 !important;
+}
+
+.demo2{
+    margin-left: -10px;
+}
+
+.bg-primary1{
+    background-color: rgb(255, 230, 183) !important;
+}
+.bg-warning1{
+background-color: rgb(255, 250, 175)!important;
+}
+.bg-info1{
+background-color: rgb(210, 253, 193)!important;
+}

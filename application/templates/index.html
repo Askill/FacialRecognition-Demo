@@ -1,0 +1,116 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Bootstrap-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" title="default" href="/od1/static/main.css">
+    <link rel="stylesheet" title="default" href="/static/main.css">
+
+    <link rel="stylesheet" title="custom" href="/static/main2.css">
+    <link rel="stylesheet" title="custom" href="/od1/static/main2.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    
+    <script src="/od1/static/main.js"></script>
+    <script src="/static/main.js"></script>
+</head>
+
+<body>
+
+
+    <div class="container">
+
+        <h2>Online Dienst 1</h2>
+        <ul class="nav nav-tabs">
+            <li id="navMenu0" class="nav-item">
+                <a data-toggle="tab" class="nav-link active" href="#home">Eingabe</a>
+            </li>
+            <li id="navMenu1" class="nav-item ">
+                <a href="#menu1" data-toggle="tab" class="nav-link disabled">Übersicht</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane container active">
+                <div id="header">
+                    <input type="button" value="Aussehen ändern" class="btn btn-dark float-right" onclick="loadNewStyle()">
+                </div>
+                <form id="form1">
+                    <div class="bg-info1 demo">
+                    <div class="demo2">eAst POST zu OD</div>
+                    partial_application_id:<br>
+                    
+                    <input type="text" class="form-control" name="partial_application_id" placeholder="partial_application_id" readonly><br>
+                    </div>
+
+                    <div class="bg-warning1 demo">
+                    <div class="demo2">OD GET an eAst</div>
+                    sent_date:<br>
+                    <input type="text" class="form-control" name="sent_date" placeholder="sent_date" readonly><br>
+                    application_id:<br>
+                    <input type="text" class="form-control" name="application_id" placeholder="application_id" readonly><br>
+                    official_letter_required:<br>
+                    <input type="text" class="form-control" name="official_letter_required" placeholder="official_letter_required"
+                        readonly><br>
+                    name:<br>
+                    <input type="text" class="form-control" name="name" placeholder="name"><br>
+                    status:<br>
+                    <input type="text" class="form-control" name="status" placeholder="status" readonly><br><br>
+                </div>
+
+                <div class="bg-primary1 demo">
+                    <div class="demo2">Daten des OD</div>
+                    Grund:<br>
+                    <input type="text" class="form-control" name="reason" placeholder="Grund"><br>
+                    Notiz:<br>
+                    <input type="text" class="form-control" name="note" placeholder="Notitz"><br>
+                </div>
+                    <input type="button" value="Speichern" class="btn btn-dark float-right" onclick="sendVorhaben()">
+                </form>
+            </div>
+            <div id="menu1" class="tab-pane container">
+                <h2 id="status"></h2>
+                <form id="form2">
+                    <div class="demo">
+                    
+                    partial_application_id:<br>
+                    <input type="text" class="form-control" name="partial_application_id" placeholder="partial_application_id" readonly><br>
+                    sent_date:<br>
+                    <input type="text" class="form-control" name="sent_date" placeholder="sent_date" readonly><br>
+                    application_id:<br>
+                    <input type="text" class="form-control" name="application_id" placeholder="application_id" readonly><br>
+                    official_letter_required:<br>
+                    <input type="text" class="form-control" name="official_letter_required" placeholder="official_letter_required"
+                        readonly><br>
+                    name:<br>
+                    <input type="text" class="form-control" name="name" placeholder="name" readonly><br>
+                    status:<br>
+                    <input type="text" class="form-control" name="status" placeholder="status" readonly><br><br>
+                    </div>
+                    
+                    <div class="bg-primary1 demo">
+                    <div class="demo2">Geänderte Daten</div>
+                    Grund:<br>
+                    <input type="text" class="form-control" name="reason" placeholder="Grund" readonly><br>
+                    Notiz:<br>
+                    <input type="text" class="form-control" name="note" placeholder="Notitz" readonly><br>
+                </div>
+               
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>loadData();</script>
+</body>
+
+</html>
