@@ -28,6 +28,23 @@ class Person(Base):
     face = Column('face', LargeBinary)
     fingerprints = relationship("Fingerprint", foreign_keys='Fingerprint.person_id')
 
+    def serialize(self):
+        prints = []
+        for fingerprint in self.fingerprints:
+            prints.append(fingerprint.serialize())
+            
+        data = {
+        "person_id": self.person_id,
+        "timestamp": self.timestamp,
+        "fname": self.fname,
+        "lname": self.lname,
+        "yob": self.yob,
+        "gender": self.gender,
+        "face": self.face,
+        "fingerprints": prints
+        }
+        return data
+
 class Fingerprint(Base):
     __tablename__ = "fingerprint"
     person_id = Column('person_id', Integer, ForeignKey('person.person_id'),  primary_key=True)
@@ -35,5 +52,14 @@ class Fingerprint(Base):
     fingerprint_id = Column('fingerprint_id', Integer,  primary_key=True)                       # 0: left pinky;  9: right pinky
     timestamp = Column('timestamp', DateTime, default=datetime.utcnow)
     fingerprint = Column('fingerprint', LargeBinary)
+
+    def serialize(self):
+        data = {
+            "person_id": self.person_id,
+            "fingerprint_id": self.fingerprint_id,
+            "timestamp": self.timestamp,
+            "fingerprint": self.fingerprint
+        }
+        return data
 
 Base.metadata.create_all(engine)

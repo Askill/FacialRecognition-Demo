@@ -3,7 +3,7 @@ import flask
 import requests
 import application.config as config
 import json
-from application.db import Session, Person
+from application.db import Session, Person, Fingerprint
 
 class PersonList(Resource):
     def post(self, id):
@@ -19,14 +19,17 @@ class PersonList(Resource):
         """  """
         try:
             session = Session()
-            person = Person(fname="hi")
+            fingerprint = Fingerprint(fingerprint_id=1)
+            person = Person(fname="hi", fingerprints=[fingerprint])
+            session.add(fingerprint)
             session.add(person)
+            
             session.commit()
 
             data = list(session.query(Person).all())
             arr = []
             for x in data:
-                arr.append(json.loads(x))
+                arr.append(x.serialize())
 
             print(arr)
             return flask.make_response(flask.jsonify({'data': arr}), 200)
