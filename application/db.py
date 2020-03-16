@@ -32,7 +32,12 @@ class Person(Base):
         prints = []
         for fingerprint in self.fingerprints:
             prints.append(fingerprint.serialize())
-            
+        
+        if self.face is not None:
+            face = self.face.decode('utf-8')
+        else:
+            face = None
+
         data = {
         "person_id": self.person_id,
         "timestamp": self.timestamp,
@@ -40,7 +45,7 @@ class Person(Base):
         "lname": self.lname,
         "yob": self.yob,
         "gender": self.gender,
-        "face": self.face,
+        "face": face,
         "fingerprints": prints
         }
         return data
@@ -54,11 +59,15 @@ class Fingerprint(Base):
     fingerprint = Column('fingerprint', LargeBinary)
 
     def serialize(self):
+        if self.fingerprint is not None:
+            fp = self.fingerprint.decode('utf-8')
+        else:
+            fp = None
         data = {
             "person_id": self.person_id,
             "fingerprint_id": self.fingerprint_id,
             "timestamp": self.timestamp,
-            "fingerprint": self.fingerprint
+            "fingerprint": fp
         }
         return data
 
