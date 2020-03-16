@@ -67,9 +67,16 @@ class PersonList(Resource):
     def delete(self, id = None):
         """  """
         try:
-            data = ""
+            if id is None:
+                return flask.make_response(flask.jsonify({'error': "No ID given"}), 404) 
+
+            session = Session()
+            data = session.query(Person).filter_by(person_id=id).delete()
+            session.commit()
+            
             return flask.make_response(flask.jsonify({'data': data}), 204)
+
         except Exception as e:
             print("error: -", e)
-            return flask.make_response(flask.jsonify({'error': str(e)}), 400)
+            return flask.make_response(flask.jsonify({'error': str(e)}), 404)
 
