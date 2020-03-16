@@ -1,23 +1,26 @@
-.demo{
-    max-width: 60%;
-    min-width: 100px;
-    padding: 20px;
+#list{
+    position: absolute;
+    right: 0;
+    top:0;
+    width: 20rem;
+    height: 100%;   
+    background-color: aqua;
 }
 
-.container{
-    padding:0 !important;
+#switch{
+    width: 25rem;
+    height: 5rem;
+    position: relative;
+    top: 0;
+    left: -50%;
+    background-color: aqua;
 }
 
-.demo2{
-    margin-left: -10px;
-}
-
-.bg-primary1{
-    background-color: rgb(255, 230, 183) !important;
-}
-.bg-warning1{
-background-color: rgb(255, 250, 175)!important;
-}
-.bg-info1{
-background-color: rgb(210, 253, 193)!important;
+#main{
+    width: 65rem;
+    height: 38rem;
+    position: relative;
+    top: 10rem;
+    left: -50%;
+    background-color: aqua;
 }
