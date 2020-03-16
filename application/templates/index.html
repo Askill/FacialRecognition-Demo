@@ -6,6 +6,7 @@
     <!--Bootstrap-->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://bootswatch.com/4/superhero/bootstrap.css" rel="stylesheet" id="bootstrap-css3">
     <link rel="stylesheet" title="default" href="/static/main.css">
 
     <!-- jQuery library -->
@@ -16,6 +17,7 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 
@@ -24,20 +26,32 @@
 
 <body>
 
-    <div style="position: fixed; left: 50%;">
-        <div class="container" id="switch">
-            hi
-
+    <div style="position: fixed; left: 50%; z-index: 9999;">
+        <div class="navbar navbar-expand-lg navbar-dark bg-dark" id="switch">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary active navi">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked=""> Identify
+                </label>
+                <label class="btn btn-primary navi">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Validate
+                </label>
+                <label class="btn btn-primary navi">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Enrole
+                </label>
+                <label class="btn btn-primary navi">
+                    <input type="radio" name="options" id="option4" autocomplete="off"> Change
+                </label>
+            </div>
         </div>
     </div>
     <div style="position: fixed; left: 50%;">
-        <div class="container" id="main">
+        <div class="container bg-dark" id="main">
 
             hi
         </div>
     </div>
-    <div class="container" id="list">
-        hi
+    <div class="container bg-dark" id="list">
+        
 
     </div>
 

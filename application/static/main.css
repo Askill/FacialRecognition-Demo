@@ -3,8 +3,8 @@
     right: 0;
     top:0;
     width: 20rem;
-    height: 100%;   
-    background-color: aqua;
+    min-height: 100%;   
+ 
 }
 
 #switch{
@@ -13,7 +13,7 @@
     position: relative;
     top: 0;
     left: -50%;
-    background-color: aqua;
+    
 }
 
 #main{
@@ -22,5 +22,28 @@
     position: relative;
     top: 10rem;
     left: -50%;
-    background-color: aqua;
+   
+}
+
+.listIMG{
+    width: 5rem;
+    float: left;
+}
+
+.navi{
+    margin-left: 1.5rem;
+}
+
+.personalInfo{
+    float: right;
+    width: 9rem;
+    margin:0;
+    padding:0;
+}
+.card{
+    margin-top:2rem;
+}
+.card-text{
+    padding: 0;
+    height: 0;
 }
