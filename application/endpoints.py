@@ -3,8 +3,10 @@ import flask
 import requests
 import application.config as config
 import json
+import cv2
 from application.db import Session, Person, Fingerprint
 
+lastImage = ""
 
 class PersonList(Resource):
     def post(self, id = None):
@@ -41,7 +43,18 @@ class PersonList(Resource):
     def get(self, id = None):
         """  """
         try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('useFace', type=bool, required=False)
+            args = parser.parse_args()
+
             session = Session()
+
+            if "useFace" in args and args["useFace"]:
+                
+                # replace by Biometric function
+                data = list(session.query(Person).all())[1].serialize()
+                return flask.make_response(flask.jsonify({'data': data}), 200)
+                
             if id is None:
                 data = list(session.query(Person).all())
             else:
@@ -80,3 +93,51 @@ class PersonList(Resource):
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)
 
+class Camera(Resource):
+
+    
+
+    # provides th function used for the live streams
+    class VideoCamera(object):
+        """Video stream object"""
+        url = "http://131.95.3.162/mjpg/video.mjpg"
+        def __init__(self):
+            self.video = cv2.VideoCapture(self.url)
+
+        def __del__(self):
+            self.video.release()
+        
+        def get_frame(self, ending):
+            success, image = self.video.read()
+            ret, jpeg = cv2.imencode(ending, image)
+            return jpeg.tobytes()
+
+
+    def gen(self, camera):
+        """Video streaming generator function."""
+        while True:
+            frame = camera.get_frame('.jpg')
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+    def get(self, type = "stream"):
+        global lastImage
+        try:
+            if type == "stream":
+                return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+            
+            elif type == "still":
+                return flask.Response(lastImage,  mimetype='image/jpeg')
+
+            return flask.make_response(flask.jsonify({'error': "No idea how you got here"}), 404)
+        except Exception as e:
+            print("error: -", e)
+            return flask.make_response(flask.jsonify({'error': str(e)}), 404)
+
+    def post(self):
+        global lastImage
+        try:
+            lastImage = self.VideoCamera().get_frame('.png')
+        except Exception as e:
+            print("error: -", e)
+            return flask.make_response(flask.jsonify({'error': str(e)}), 404)

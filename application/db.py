@@ -12,10 +12,14 @@ connection = engine.connect()
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
+lastImage = ""
+
 class Gender(enum.Enum):
-    other = "other"
-    male = "male"
-    female = "female"
+    other = "Other"
+    male = "Male"
+    female = "Female"
+    def __str__(self):
+        return str(self.value)
 
 class Person(Base):
     __tablename__ = "person"
@@ -44,7 +48,7 @@ class Person(Base):
         "fname": self.fname,
         "lname": self.lname,
         "yob": self.yob,
-        "gender": self.gender,
+        "gender": str(self.gender),
         "face": face,
         "fingerprints": prints
         }

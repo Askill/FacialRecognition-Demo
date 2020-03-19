@@ -21,6 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 
+    <script src="/static/coms.js"></script>
     <script src="/static/main.js"></script>
 </head>
 
@@ -28,26 +29,25 @@
 
     <div style="position: fixed; left: 50%; z-index: 9999;">
         <div class="navbar navbar-expand-lg navbar-dark bg-dark" id="switch">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-primary active navi">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked=""> Identify
-                </label>
-                <label class="btn btn-primary navi">
-                    <input type="radio" name="options" id="option2" autocomplete="off"> Validate
-                </label>
-                <label class="btn btn-primary navi">
-                    <input type="radio" name="options" id="option3" autocomplete="off"> Enrole
-                </label>
-                <label class="btn btn-primary navi">
-                    <input type="radio" name="options" id="option4" autocomplete="off"> Change
-                </label>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">        
+                    <button type="button" class="btn btn-primary navButton active" id="option1" onclick="focusNav('#option1'); renderIdentify()"> Identify            
+                    <button type="button" class="btn  navButton" id="option2" onclick="focusNav('#option2'); renderValidate()"> Validate             
+                    <button type="button" class="btn  navButton" id="option3" onclick="focusNav('#option3'); renderEnrole()"> Enrole          
+                    <button type="button" class="btn  navButton" id="option4" onclick="focusNav('#option4'); renderChange()"> Change
             </div>
         </div>
     </div>
     <div style="position: fixed; left: 50%;">
         <div class="container bg-dark" id="main">
+            <div class="middle" id="middle-left">
 
-            hi
+
+            </div>
+            <div class="middle" id="middle-right">
+
+
+            </div>
+            
         </div>
     </div>
     <div class="container bg-dark" id="list">

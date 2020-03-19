@@ -15,13 +15,18 @@
     left: -50%;
     
 }
-
+.navButton{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-right: 0.5rem;
+}
 #main{
     width: 65rem;
     height: 38rem;
     position: relative;
     top: 10rem;
     left: -50%;
+    display: block;
    
 }
 
@@ -46,4 +51,34 @@
 .card-text{
     padding: 0;
     height: 0;
+}
+
+#middle-left{
+    float: left;
+}
+#middle-right{
+    float:right;
+}
+.middle{
+    margin: 0rem 2rem 0 2rem;
+    height: 100%;
+    width: 40%;
+    display: block;
+}
+
+#image-left{
+    width:100%;
+    padding: 1rem;
+}
+#image-right{
+    width:100%;
+    padding: 1rem;
+}
+
+.heroInfo{
+    padding: 1rem;
+}
+
+.middle-controls{
+    margin-right: 1rem;
 }
