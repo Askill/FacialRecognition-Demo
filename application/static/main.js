@@ -19,8 +19,6 @@ function focusPerson(id) {
     renderPersonRight()
 }
 
-
-
 function loadPersonList(data) {
     console.log(data)
     data = data["data"]
@@ -38,6 +36,7 @@ function loadPersonList(data) {
                         Gender: ${item["gender"]} <br>
                         YoB: ${item["yob"]} <br>
                         Available FP: ${item["fingerprints"].length} <br>
+                        
                     </div>
                     
                 </p>
@@ -61,10 +60,12 @@ function renderPersonRight(data){
         <img src="${data["face"]}" id="image-right"> </img>
 
         <h4 class="heroInfo">
-        Gender: ${data["gender"]} <br>
-        YoB: ${data["yob"]} <br>
-        Available FP: ${data["fingerprints"].length} <br>
-        </div>
+            Gender: ${data["gender"]} <br>
+            YoB: ${data["yob"]} <br>
+            Available FP: ${data["fingerprints"].length} <br>
+            <h3>Score: ${data["matching_score"]} </h3>
+        </h4>
+        
     `
     mr.innerHTML = string;
 }
@@ -81,40 +82,13 @@ function identify(){
 
 function validate(){
     snapShot()
-    getJSON(rootKontext + "/api/v1/person/?useFace=True&?validateId="+selected,
+    getJSON(rootKontext + "/api/v1/person/" + selected + "?useFace=True",
         function (error, data) {
             data = data["data"]
             renderPersonRight(data)
         }
     );
 }
-
-function renderValidate(){
-    string = `
-    <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
-    
-    <button onclick="validate()" class="btn btn-primary float-right middle-controls">Validate</button>
-    <button onclick="renderValidate()" class="btn btn-warning float-right middle-controls">Retry</button>
-    `
-    ml.innerHTML = string;
-}
-
-function renderChange(){
-    console.log("change")
-}
-function renderEnrole(){
-    console.log("enrole")
-}
-function renderIdentify(){
-    string = `
-    <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
-    
-    <button onclick="identify()" class="btn btn-primary float-right middle-controls">Identify</button>
-    <button onclick="renderIdentify()" class="btn btn-warning float-right middle-controls">Retry</button>
-    `
-    ml.innerHTML = string;
-}
-
 
 function loadStream() {
     string = `

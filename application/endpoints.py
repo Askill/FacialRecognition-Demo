@@ -49,12 +49,22 @@ class PersonList(Resource):
 
             session = Session()
 
+            # this indicates that the captured face should be use for identification / validation
             if "useFace" in args and args["useFace"]:
-                
-                # replace by Biometric function
-                data = list(session.query(Person).all())[1].serialize()
-                return flask.make_response(flask.jsonify({'data': data}), 200)
-                
+                if id is not None:
+                    # validate
+                    data = list(session.query(Person).filter_by(person_id=id))[0].serialize()
+                    data["matching_score"] = 0.95
+                    # return identified person object + matching score
+                    return flask.make_response(flask.jsonify({'data': data}), 200)
+                else:
+                    # replace by Biometric function
+                    # identify
+                    # return identified person object + matching score
+                    data = list(session.query(Person).all())[1].serialize()
+                    data["matching_score"] = 0.95
+                    return flask.make_response(flask.jsonify({'data': data}), 200)
+
             if id is None:
                 data = list(session.query(Person).all())
             else:

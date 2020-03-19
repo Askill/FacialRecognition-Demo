@@ -1,4 +1,10 @@
+function clearMiddle(){
+    ml.innerHTML = ""
+    mr.innerHTML = ""
+}
+
 function renderValidate(){
+    clearMiddle()
     string = `
     <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
     
@@ -9,12 +15,15 @@ function renderValidate(){
 }
 
 function renderChange(){
+    clearMiddle()
     console.log("change")
 }
 function renderEnrole(){
+    clearMiddle()
     console.log("enrole")
 }
 function renderIdentify(){
+    clearMiddle()
     string = `
     <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
     
