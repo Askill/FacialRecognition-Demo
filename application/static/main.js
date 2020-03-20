@@ -5,6 +5,15 @@ var ml = document.getElementById('middle-left');
 var mr = document.getElementById('middle-right');
 personData = {}
 
+/**
+ * Retrieves input data from a form and returns it as a JSON object.
+ * @param  {HTMLFormControlsCollection} elements  the form elements
+ * @return {Object}                               form data as an object literal
+ */
+const formToJSON = elements => [].reduce.call(elements, (data, element) => {
+    data[element.name] = element.value;
+    return data;
+  }, {});
 
 function focusNav(id) {
     focusedID = id;
@@ -51,7 +60,8 @@ function snapShot(){
     postJSON(rootKontext + "/api/v1/camera/", {},         
         function (error, data) {
             document.getElementById('image-left').src = rootKontext + "/api/v1/camera/still";
-        }
+        },
+        null
     );
 }
 
@@ -70,12 +80,32 @@ function renderPersonRight(data){
     mr.innerHTML = string;
 }
 
+function enrole(){
+    data = {}
+    data["fname"] = document.getElementById("personform")["fname"].value
+    data["lname"] = document.getElementById("personform")["lname"].value
+    data["gender"] = document.getElementById("personform")["gender"].value
+    data["yob"] = document.getElementById("personform")["yob"].value
+    data = {"person": data}
+    console.log(data)
+    postJSON(rootKontext + "/api/v1/person/", JSON.stringify(data), 
+    function(){
+        location.reload()
+    },
+    null
+    )
+}
+
 function identify(){
     snapShot()
     getJSON(rootKontext + "/api/v1/person/?useFace=True",
         function (error, data) {
             data = data["data"]
             renderPersonRight(data)
+            $("#middle-right").removeClass("border-danger").addClass("boarder-success")
+        },
+        function(){
+            $("#middle-right").removeClass("border-success").addClass("border-danger")
         }
     );
 }
@@ -86,6 +116,11 @@ function validate(){
         function (error, data) {
             data = data["data"]
             renderPersonRight(data)
+            $("#middle-right").removeClass("border-danger").addClass("border-success")
+        },
+        function(){
+            mr.innerHTML="<p><h3>Please select a person<br> from the list, which you want to use for validation</h3></p>"
+            $("#middle-right").removeClass("border-success").addClass("border-danger")
         }
     );
 }
@@ -110,7 +145,8 @@ function loadData() {
             personData = data
             loadPersonList(data)
             renderIdentify()
-        }
+        },
+        null
     );
 }
 
