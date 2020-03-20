@@ -17,7 +17,9 @@ function renderValidate(){
 
 function renderChange(){
     clearMiddle()
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
     console.log("change")
+
 }
 function renderEnrole(){
     clearMiddle()
@@ -44,6 +46,7 @@ function renderEnrole(){
     <button type="button" class="btn btn-success float-right" onclick="enrole()">Enrole</button>
     `
     mr.innerHTML = string2;
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
 }
 function renderIdentify(){
     clearMiddle()
@@ -54,4 +57,5 @@ function renderIdentify(){
     <button onclick="renderIdentify()" class="btn btn-warning float-right middle-controls">Retry</button>
     `
     ml.innerHTML = string;
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
 }
