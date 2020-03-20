@@ -4,6 +4,7 @@ import requests
 import application.config as config
 import json
 import cv2
+import base64
 from application.db import Session, Person, Fingerprint
 
 lastImage = ""
@@ -14,17 +15,20 @@ class PersonList(Resource):
         try:
             jsonData = flask.request.get_json(force=True)
             personJSON = jsonData["person"]
-
+            print(personJSON)
             session = Session()
+
+            # get Fingerprints with Middleware
             fingerprintsObj = []
-            for fingerprint in personJSON["fingerprints"]:
-                fingerprint["fingerprint"] = fingerprint["fingerprint"].encode('utf-8')
-                fp = Fingerprint(**fingerprint) # ** Operator converts DICT/JSON to initializable 
-                fingerprintsObj.append(fp)  
-                session.add(fp)
+            if "fingerprints" in personJSON:
+                for fingerprint in personJSON["fingerprints"]:
+                    fingerprint["fingerprint"] = fingerprint["fingerprint"].encode('utf-8')
+                    fp = Fingerprint(**fingerprint) # ** Operator converts DICT/JSON to initializable 
+                    fingerprintsObj.append(fp)  
+                    session.add(fp)
 
             personJSON["fingerprints"] = fingerprintsObj
-            personJSON["face"] = personJSON["face"].encode('utf-8')
+            personJSON["face"] = ("data:image/png;base64,"+str(lastImage)).encode('utf-8')
             person = Person(**personJSON)
             session.add(person)
             session.commit()
@@ -120,13 +124,13 @@ class Camera(Resource):
         def get_frame(self, ending):
             success, image = self.video.read()
             ret, jpeg = cv2.imencode(ending, image)
-            return jpeg.tobytes()
+            return jpeg
 
 
     def gen(self, camera):
         """Video streaming generator function."""
         while True:
-            frame = camera.get_frame('.jpg')
+            frame = camera.get_frame('.jpg').tobytes()
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
@@ -137,7 +141,8 @@ class Camera(Resource):
                 return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
             
             elif type == "still":
-                return flask.Response(lastImage,  mimetype='image/jpeg')
+                lastImage1 = base64.b64decode(lastImage.encode())
+                return flask.Response(lastImage1,  mimetype='image/png')
 
             return flask.make_response(flask.jsonify({'error': "No idea how you got here"}), 404)
         except Exception as e:
@@ -147,7 +152,7 @@ class Camera(Resource):
     def post(self):
         global lastImage
         try:
-            lastImage = self.VideoCamera().get_frame('.png')
+            lastImage = base64.b64encode(self.VideoCamera().get_frame('.png')).decode()
         except Exception as e:
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)

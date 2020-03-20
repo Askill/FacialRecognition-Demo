@@ -27,7 +27,7 @@
     top: 10rem;
     left: -50%;
     display: block;
-   
+   padding: 0;
 }
 
 .listIMG{
@@ -46,7 +46,7 @@
     padding:0;
 }
 .card{
-    margin-top:2rem;
+    margin-top:1rem;
 }
 .card-text{
     padding: 0;
@@ -60,25 +60,27 @@
     float:right;
 }
 .middle{
-    margin: 0rem 2rem 0 2rem;
+    padding: 2rem ;
+    margin: 0 !important;
     height: 100%;
-    width: 40%;
+    width: 45%;
     display: block;
 }
 
 #image-left{
     width:100%;
-    padding: 1rem;
+  
 }
 #image-right{
     width:100%;
-    padding: 1rem;
+
 }
 
 .heroInfo{
-    padding: 1rem;
+   
 }
 
 .middle-controls{
-    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
 }
