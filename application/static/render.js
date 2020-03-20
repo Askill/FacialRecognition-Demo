@@ -8,7 +8,7 @@ function renderValidate(){
     string = `
     <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
     
-    <button onclick="validate()" class="btn btn-primary float-right middle-controls">Validate</button>
+    <button onclick="validate()" class="btn btn-primary float-right middle-controls">Verify</button>
     <button onclick="renderValidate()" class="btn btn-warning float-right middle-controls">Retry</button>
     `
     ml.innerHTML = string;
@@ -17,7 +17,9 @@ function renderValidate(){
 
 function renderChange(){
     clearMiddle()
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
     console.log("change")
+
 }
 function renderEnrole(){
     clearMiddle()
@@ -44,6 +46,7 @@ function renderEnrole(){
     <button type="button" class="btn btn-success float-right" onclick="enrole()">Enrole</button>
     `
     mr.innerHTML = string2;
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
 }
 function renderIdentify(){
     clearMiddle()
@@ -54,4 +57,5 @@ function renderIdentify(){
     <button onclick="renderIdentify()" class="btn btn-warning float-right middle-controls">Retry</button>
     `
     ml.innerHTML = string;
+    $("#middle-right").removeClass("border-danger").removeClass("border-success")
 }

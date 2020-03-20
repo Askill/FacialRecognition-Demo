@@ -114,7 +114,7 @@ class Camera(Resource):
     # provides th function used for the live streams
     class VideoCamera(object):
         """Video stream object"""
-        url = "http://131.95.3.162/mjpg/video.mjpg"
+        url = "https://webcam1.lpl.org/axis-cgi/mjpg/video.cgi"
         def __init__(self):
             self.video = cv2.VideoCapture(self.url)
 
