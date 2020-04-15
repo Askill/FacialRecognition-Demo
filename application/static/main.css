@@ -58,6 +58,7 @@
 }
 #middle-right{
     float:right;
+    overflow: auto;
 }
 .middle{
     padding: 2rem ;
@@ -73,7 +74,7 @@
 }
 #image-right{
     width:100%;
-
+    
 }
 
 .heroInfo{
@@ -83,4 +84,16 @@
 .middle-controls{
     margin-left: 1rem;
     margin-top: 1rem;
+}
+
+
+#middle-right .personalInfo{
+    float: right;
+    width: 9rem;
+    margin:0;
+    padding:0;
+}
+#middle-right  .listIMG{
+    width: 10rem;
+    float: left;
 }

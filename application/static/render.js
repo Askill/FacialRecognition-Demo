@@ -59,3 +59,40 @@ function renderIdentify(){
     ml.innerHTML = string;
     $("#middle-right").removeClass("border-danger").removeClass("border-success")
 }
+
+function renderPersonIdentify(data){
+    console.log(data)
+    data.forEach(function (item) {
+        string = `
+        <div class="card border-light"  onclick="focusPerson(${item["person_id"]})" id="person${item["person_id"]}">
+            <div class="card-body">
+                <p class="card-text">
+                    <img class="listImg" src="${item["face"]}"></img>
+                    <div class="personalInfo">
+                        Name: ${item["fname"]} ${item["lname"]} <br>
+                        Gender: ${item["gender"]} <br>
+                        YoB: ${item["yob"]} <br>
+                        <h4>${item["matching_score"]}</h4>
+                    </div>
+                </p>
+            </div>
+        </div>
+        `
+        mr.innerHTML += string;
+    })
+}
+
+function renderPersonRight(data){
+    string = `
+        <img src="${data["face"]}" id="image-right"> </img>
+
+        <h4 class="heroInfo">
+            Gender: ${data["gender"]} <br>
+            YoB: ${data["yob"]} <br>
+            Available FP: ${data["fingerprints"].length} <br>
+            <h3>Score: ${data["matching_score"]} </h3>
+        </h4>
+        
+    `
+    mr.innerHTML = string;
+}

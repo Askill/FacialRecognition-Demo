@@ -7,7 +7,7 @@ import enum
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
-engine = db.create_engine('sqlite:///./test.sqlite', echo=True)
+engine = db.create_engine('sqlite:///./test.sqlite', echo=False)
 connection = engine.connect()
 Base = declarative_base()
 Session = sessionmaker(bind=engine)

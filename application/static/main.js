@@ -65,20 +65,6 @@ function snapShot(){
     );
 }
 
-function renderPersonRight(data){
-    string = `
-        <img src="${data["face"]}" id="image-right"> </img>
-
-        <h4 class="heroInfo">
-            Gender: ${data["gender"]} <br>
-            YoB: ${data["yob"]} <br>
-            Available FP: ${data["fingerprints"].length} <br>
-            <h3>Score: ${data["matching_score"]} </h3>
-        </h4>
-        
-    `
-    mr.innerHTML = string;
-}
 
 function enrole(){
     data = {}
@@ -101,7 +87,7 @@ function identify(){
     getJSON(rootKontext + "/api/v1/person/?useFace=True",
         function (error, data) {
             data = data["data"]
-            renderPersonRight(data)
+            renderPersonIdentify(data)
             $("#middle-right").removeClass("border-danger").addClass("boarder-success")
         },
         function(){

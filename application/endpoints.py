@@ -65,8 +65,12 @@ class PersonList(Resource):
                     # replace by Biometric function
                     # identify
                     # return identified person object + matching score
-                    data = list(session.query(Person).all())[1].serialize()
-                    data["matching_score"] = 0.95
+                    data = []
+                    for x in list(session.query(Person).all()):
+                        ser = x.serialize()
+                        ser["matching_score"] = 0.95
+                        data.append(ser)
+                    
                     return flask.make_response(flask.jsonify({'data': data}), 200)
 
             if id is None:
