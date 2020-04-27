@@ -6,7 +6,7 @@ import json
 import cv2
 import base64
 from application.db import Session, Person, Fingerprint
-
+import application.face_rec as fr
 lastImage = ""
 
 class PersonList(Resource):
@@ -58,17 +58,19 @@ class PersonList(Resource):
                 if id is not None:
                     # validate
                     data = list(session.query(Person).filter_by(person_id=id))[0].serialize()
-                    data["matching_score"] = 0.95
+                    results = fr.identifyFace(lastImage)
+                    data["matching_score"] = 1 - results[int(id)]
                     # return identified person object + matching score
                     return flask.make_response(flask.jsonify({'data': data}), 200)
                 else:
                     # replace by Biometric function
                     # identify
                     # return identified person object + matching score
+                    results = fr.identifyFace(lastImage)
                     data = []
                     for x in list(session.query(Person).all()):
                         ser = x.serialize()
-                        ser["matching_score"] = 0.95
+                        ser["matching_score"] = 1 - results[x.person_id]
                         data.append(ser)
                     
                     return flask.make_response(flask.jsonify({'data': data}), 200)
