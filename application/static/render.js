@@ -67,7 +67,7 @@ function renderPersonIdentify(data){
         <div class="card border-light"  onclick="focusPerson(${item["person_id"]})" id="person${item["person_id"]}">
             <div class="card-body">
                 <p class="card-text">
-                    <img class="listImg" src="${item["face"]}"></img>
+                    <img class="listImg" src="data:image/png;base64,${item["face"]}"></img>
                     <div class="personalInfo">
                         Name: ${item["fname"]} ${item["lname"]} <br>
                         Gender: ${item["gender"]} <br>
@@ -84,7 +84,7 @@ function renderPersonIdentify(data){
 
 function renderPersonRight(data){
     string = `
-        <img src="${data["face"]}" id="image-right"> </img>
+        <img src="data:image/png;base64,${data["face"]}" id="image-right"> </img>
 
         <h4 class="heroInfo">
             Gender: ${data["gender"]} <br>

@@ -40,7 +40,7 @@ function loadPersonList(data) {
                 <h6 class="card-subtitle mb-2 text-muted">${item["timestamp"]}</h6>
 
                 <p class="card-text">
-                    <img class="listImg" src="${item["face"]}"></img>
+                    <img class="listImg" src="data:image/png;base64,${item["face"]}"></img>
                     <div class="personalInfo">
                         Gender: ${item["gender"]} <br>
                         YoB: ${item["yob"]} <br>

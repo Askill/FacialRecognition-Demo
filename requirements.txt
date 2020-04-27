@@ -3,3 +3,5 @@ flask_restful
 sqlalchemy
 requests
 flask-restful-swagger-3
+cmake
+face_recognition

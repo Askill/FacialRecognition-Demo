@@ -28,7 +28,7 @@ class PersonList(Resource):
                     session.add(fp)
 
             personJSON["fingerprints"] = fingerprintsObj
-            personJSON["face"] = ("data:image/png;base64,"+str(lastImage)).encode('utf-8')
+            personJSON["face"] = lastImage
             person = Person(**personJSON)
             session.add(person)
             session.commit()
@@ -118,7 +118,7 @@ class Camera(Resource):
     # provides th function used for the live streams
     class VideoCamera(object):
         """Video stream object"""
-        url = "https://webcam1.lpl.org/axis-cgi/mjpg/video.cgi"
+        url = "http://192.168.178.56:8080/video"
         def __init__(self):
             self.video = cv2.VideoCapture(self.url)
 
@@ -145,7 +145,7 @@ class Camera(Resource):
                 return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
             
             elif type == "still":
-                lastImage1 = base64.b64decode(lastImage.encode())
+                lastImage1 = base64.b64decode(lastImage)
                 return flask.Response(lastImage1,  mimetype='image/png')
 
             return flask.make_response(flask.jsonify({'error': "No idea how you got here"}), 404)
@@ -156,7 +156,7 @@ class Camera(Resource):
     def post(self):
         global lastImage
         try:
-            lastImage = base64.b64encode(self.VideoCamera().get_frame('.png')).decode()
+            lastImage = base64.b64encode(self.VideoCamera().get_frame('.png'))
         except Exception as e:
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)
