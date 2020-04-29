@@ -54,15 +54,18 @@ def initFaceRec():
             known_faces.append(encoding)
             known_names.append(name)
 
-def identifyFace(imgage):
-    print('Processing unknown faces...')
-    image = face_recognition.load_image_file('C:/Users/ofjok/Desktop/1.png')
+    session.close()
 
+def identifyFace(image):
+    print('Processing unknown faces...')
+    #image = face_recognition.load_image_file('C:/Users/ofjok/Desktop/1.png')
+    nparr = np.fromstring(base64.b64decode(image), np.uint8)
+    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    #image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     locations = face_recognition.face_locations(image, model=MODEL)
     encodings = face_recognition.face_encodings(image, locations)
 
 
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     res = {}
 
@@ -80,5 +83,5 @@ def identifyFace(imgage):
     return res
 
 
-initFaceRec()
-identifyFace("")
+
+#identifyFace("")

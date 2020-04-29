@@ -37,7 +37,7 @@ class PersonList(Resource):
             arr = []
             for x in data:
                 arr.append(x.serialize())
-
+            session.close()
             return flask.make_response(flask.jsonify({'data': arr}), 201)
 
         except Exception as e:
@@ -46,15 +46,17 @@ class PersonList(Resource):
 
     def get(self, id = None):
         """  """
+        session = Session()
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('useFace', type=bool, required=False)
             args = parser.parse_args()
 
-            session = Session()
+            
 
             # this indicates that the captured face should be use for identification / validation
             if "useFace" in args and args["useFace"]:
+                Camera().post()
                 if id is not None:
                     # validate
                     data = list(session.query(Person).filter_by(person_id=id))[0].serialize()
@@ -82,9 +84,11 @@ class PersonList(Resource):
             arr = []
             for x in data:
                 arr.append(x.serialize())
+            session.close()
 
             return flask.make_response(flask.jsonify({'data': arr}), 200)
         except Exception as e:
+            session.close()
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 400)
 
@@ -106,7 +110,7 @@ class PersonList(Resource):
             session = Session()
             data = session.query(Person).filter_by(person_id=id).delete()
             session.commit()
-            
+            session.close()
             return flask.make_response(flask.jsonify({'data': data}), 204)
 
         except Exception as e:
@@ -114,10 +118,7 @@ class PersonList(Resource):
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)
 
 class Camera(Resource):
-
-    
-
-    # provides th function used for the live streams
+    # provides the function used for the live streams
     class VideoCamera(object):
         """Video stream object"""
         url = "http://192.168.178.56:8080/video"
@@ -131,7 +132,6 @@ class Camera(Resource):
             success, image = self.video.read()
             ret, jpeg = cv2.imencode(ending, image)
             return jpeg
-
 
     def gen(self, camera):
         """Video streaming generator function."""
