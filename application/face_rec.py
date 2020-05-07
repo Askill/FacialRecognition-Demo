@@ -15,15 +15,8 @@ UNKNOWN_FACES_DIR = 'unknown_faces'
 TOLERANCE = 0.6
 FRAME_THICKNESS = 3
 FONT_THICKNESS = 2
-MODEL = 'hog'  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
+MODEL = "hog"  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
 
-
-# Returns (R, G, B) from name
-def name_to_color(name):
-    # Take 3 first letters, tolower()
-    # lowercased character ord() value rage is 97 to 122, substract 97, multiply by 8
-    color = [(ord(c.lower())-97)*8 for c in name[:3]]
-    return color
 
 def readb64(base64_string):
     sbuf = StringIO()
@@ -34,8 +27,6 @@ def readb64(base64_string):
 print('Loading known faces...')
 known_faces = []
 known_names = []
-
-
 
 def initFaceRec():
     session = Session()
@@ -57,31 +48,66 @@ def initFaceRec():
     session.close()
 
 def identifyFace(image):
-    print('Processing unknown faces...')
-    #image = face_recognition.load_image_file('C:/Users/ofjok/Desktop/1.png')
+    print('Identifying Face')
     nparr = np.fromstring(base64.b64decode(image), np.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     #image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     locations = face_recognition.face_locations(image, model=MODEL)
     encodings = face_recognition.face_encodings(image, locations)
 
-
-
     res = {}
+
+    for face_encoding, face_location in zip(encodings, locations):
+        results = face_recognition.face_distance(known_faces, face_encoding)
+        res = {known_names[i]: results[i] for i in range(0, len(results)) }
+    
+    return res
+
+def identifyFaceVideo(url):
+    print('Identifying Faces')
+    video = cv2.VideoCapture(url)
+    image = video.read()[1]
+    ret, image = cv2.imencode(".png", image)
+    
+    nparr = np.fromstring(image, np.uint8)
+    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    locations = face_recognition.face_locations(image, model=MODEL)
+    encodings = face_recognition.face_encodings(image, locations)
 
     for face_encoding, face_location in zip(encodings, locations):
 
         # We use compare_faces (but might use face_distance as well)
         # Returns array of True/False values in order of passed known_faces
-        results = face_recognition.face_distance(known_faces, face_encoding)
+        results = face_recognition.compare_faces(known_faces, face_encoding, TOLERANCE)
 
         # Since order is being preserved, we check if any face was found then grab index
-        # then label (name) of first matching known face withing a tolerance       
-          # If at least one is true, get a name of first of found labels
-        res = {known_names[i]: results[i] for i in range(0, len(results)) }
-    
-    return res
+        # then label (name) of first matching known face withing a tolerance
+        match = None
+        if True in results:  # If at least one is true, get a name of first of found labels
+            match = "name"
+            print(f' - {match} from {results}')
 
+            # Each location contains positions in order: top, right, bottom, left
+            top_left = (face_location[3], face_location[0])
+            bottom_right = (face_location[1], face_location[2])
+            color = [255, 0, 0]
+            # Paint frame
+            cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
 
+            # Now we need smaller, filled grame below for a name
+            # This time we use bottom in both corners - to start from bottom and move 50 pixels down
+            top_left = (face_location[3], face_location[2])
+            bottom_right = (face_location[1], face_location[2] + 22)
+
+            # Paint frame
+            cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
+
+            # Wite a name
+            #cv2.putText(image, match, (face_location[3] + 10, face_location[2] + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), FONT_THICKNESS)
+
+        # Show image
+    image = cv2.imencode(".jpg", image)[1]
+    return image
 
 #identifyFace("")

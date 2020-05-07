@@ -140,12 +140,22 @@ class Camera(Resource):
             yield (b'--frame\r\n'
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+    def genProcessed(self, url=None):
+        """Video streaming generator function."""
+        url = "http://192.168.178.56:8080/video"
+        while True:
+            frame = fr.identifyFaceVideo(url).tobytes()
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
     def get(self, type = "stream"):
         global lastImage
         try:
             if type == "stream":
                 return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-            
+            if type == "processed":
+                return flask.Response(self.genProcessed(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+    
             elif type == "still":
                 lastImage1 = base64.b64decode(lastImage)
                 return flask.Response(lastImage1,  mimetype='image/png')
