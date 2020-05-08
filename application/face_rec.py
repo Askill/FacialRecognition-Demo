@@ -1,22 +1,16 @@
+import dlib
 import face_recognition
 import os
 import cv2
 from application.db import Session, Person
 import base64
 import numpy as np
-from base64 import decodestring
-import base64
-
 from io import StringIO
-from PIL import Image
 
-KNOWN_FACES_DIR = 'known_faces'
-UNKNOWN_FACES_DIR = 'unknown_faces'
 TOLERANCE = 0.6
 FRAME_THICKNESS = 3
 FONT_THICKNESS = 2
 MODEL = "hog"  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
-
 
 def readb64(base64_string):
     sbuf = StringIO()
@@ -64,7 +58,6 @@ def identifyFace(image):
     return res
 
 def identifyFaceVideo(url):
-    print('Identifying Faces')
     video = cv2.VideoCapture(url)
     image = video.read()[1]
     ret, image = cv2.imencode(".png", image)
@@ -75,39 +68,32 @@ def identifyFaceVideo(url):
     locations = face_recognition.face_locations(image, model=MODEL)
     encodings = face_recognition.face_encodings(image, locations)
 
+    face_locations = {} #face locations to be drawn
+
     for face_encoding, face_location in zip(encodings, locations):
+        
+        face_locations.update(compareFace(face_encoding, face_location))
 
-        # We use compare_faces (but might use face_distance as well)
-        # Returns array of True/False values in order of passed known_faces
-        results = face_recognition.compare_faces(known_faces, face_encoding, TOLERANCE)
-
-        # Since order is being preserved, we check if any face was found then grab index
-        # then label (name) of first matching known face withing a tolerance
-        match = None
-        if True in results:  # If at least one is true, get a name of first of found labels
-            match = "name"
-            print(f' - {match} from {results}')
-
-            # Each location contains positions in order: top, right, bottom, left
-            top_left = (face_location[3], face_location[0])
-            bottom_right = (face_location[1], face_location[2])
-            color = [255, 0, 0]
-            # Paint frame
-            cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
-
-            # Now we need smaller, filled grame below for a name
-            # This time we use bottom in both corners - to start from bottom and move 50 pixels down
-            top_left = (face_location[3], face_location[2])
-            bottom_right = (face_location[1], face_location[2] + 22)
-
-            # Paint frame
-            cv2.rectangle(image, top_left, bottom_right, color, cv2.FILLED)
-
-            # Wite a name
-            #cv2.putText(image, match, (face_location[3] + 10, face_location[2] + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), FONT_THICKNESS)
+    for k, v in face_locations.items():
+        # Paint frame
+        cv2.rectangle(image, v[0], v[1], [255, 0, 0], FRAME_THICKNESS)
+        # Wite a name
+        cv2.putText(image, k, v[0], cv2.FONT_HERSHEY_SIMPLEX, 1.5, [255, 0, 255], FONT_THICKNESS)
 
         # Show image
     image = cv2.imencode(".jpg", image)[1]
     return image
 
-#identifyFace("")
+
+def compareFace(face_encoding, face_location):
+    results = face_recognition.compare_faces(known_faces, face_encoding, TOLERANCE)
+    face_locations = {}
+    match = None
+    if True in results:  # If at least one is true, get a name of first of found labels
+        match = "name"
+        print(f' - {match} from {results}')
+        top_left = (face_location[3], face_location[0])
+        bottom_right = (face_location[1], face_location[2])
+
+        face_locations[match] = (top_left, bottom_right)
+    return face_locations
