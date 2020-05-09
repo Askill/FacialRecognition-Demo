@@ -153,12 +153,10 @@ class Camera(Resource):
         try:
             if type == "stream":
                 return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-            if type == "processed":
+            elif type == "processed":
                 return flask.Response(self.genProcessed(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
-    
             elif type == "still":
-                lastImage1 = base64.b64decode(lastImage)
-                return flask.Response(lastImage1,  mimetype='image/png')
+                return flask.Response(base64.b64decode(lastImage),  mimetype='image/png')
 
             return flask.make_response(flask.jsonify({'error': "No idea how you got here"}), 404)
         except Exception as e:
