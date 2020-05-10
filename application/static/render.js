@@ -1,6 +1,12 @@
 function clearMiddle(){
-    ml.innerHTML = ""
-    mr.innerHTML = ""
+    string = `
+    <div class="middle card" id="middle-left">
+    </div>
+    <div class="middle card" id="middle-right">
+    </div>`
+    document.getElementById("main").innerHTML = string;
+    ml = document.getElementById('middle-left');
+    mr = document.getElementById('middle-right');
 }
 
 function renderValidate(){
@@ -18,7 +24,10 @@ function renderValidate(){
 function renderChange(){
     clearMiddle()
     $("#middle-right").removeClass("border-danger").removeClass("border-success")
-    console.log("change")
+    string = `
+    <img src="${rootKontext + "/api/v1/camera/processed"}" id="image-left"> </img>
+   `
+   document.getElementById("main").innerHTML = string;
 
 }
 function renderEnrole(){
