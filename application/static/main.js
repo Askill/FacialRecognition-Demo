@@ -4,7 +4,7 @@ selected = null
 var ml = document.getElementById('middle-left');
 var mr = document.getElementById('middle-right');
 personData = {}
-
+state = null
 /**
  * Retrieves input data from a form and returns it as a JSON object.
  * @param  {HTMLFormControlsCollection} elements  the form elements
@@ -25,7 +25,7 @@ function focusPerson(id) {
     selected = id;
     $("#person" + id).removeClass('border-light').siblings().addClass('border-light')
     $("#person" + id).addClass('border-success').siblings().removeClass('border-success')
-    renderPersonRight()
+
 }
 
 function loadPersonList(data) {
@@ -36,7 +36,7 @@ function loadPersonList(data) {
         string = `
         <div class="card border-light"  onclick="focusPerson(${item["person_id"]})" id="person${item["person_id"]}">
             <div class="card-body">
-                <h4 class="card-title">${item["fname"]} ${item["lname"]}</h4>
+                <h4 class="card-title">${item["fname"]} ${item["lname"]}</h4> 
                 <h6 class="card-subtitle mb-2 text-muted">${item["timestamp"]}</h6>
 
                 <p class="card-text">
@@ -44,8 +44,7 @@ function loadPersonList(data) {
                     <div class="personalInfo">
                         Gender: ${item["gender"]} <br>
                         YoB: ${item["yob"]} <br>
-                        Available FP: ${item["fingerprints"].length} <br>
-                        
+                        <button type="button" class="btn btn-danger btn-delete" onclick="deletePerson(${item["person_id"]})">Delete</button>
                     </div>
                     
                 </p>
@@ -76,10 +75,10 @@ function enrole(){
     data = {"person": data}
     console.log(data)
     postJSON(rootKontext + "/api/v1/person/", JSON.stringify(data), 
-    function(){
-        location.reload()
-    },
-    null
+        function(){
+            location.reload()
+        },
+        null
     )
 }
 
@@ -137,3 +136,10 @@ function loadData() {
     );
 }
 
+function deletePerson(id){
+    deleteJSON(rootKontext + "/api/v1/person/"+id,
+    function(){
+        location.reload()
+    },
+    null)
+}

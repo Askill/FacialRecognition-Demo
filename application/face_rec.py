@@ -20,8 +20,6 @@ def initFaceRec():
     dlib.DLIB_USE_CUDA=True
     print('Loading known faces...', dlib.DLIB_USE_CUDA)
     session = Session()
-    # We oranize known faces as subfolders of KNOWN_FACES_DIR
-    # Each subfolder's name becomes our label (name)
     for face, name in session.query(Person.face, Person.person_id).all():
             # Load an image
             nparr = np.fromstring(base64.b64decode(face), np.uint8)
@@ -41,7 +39,7 @@ def identifyFace(image):
     print('Identifying Face')
     nparr = np.fromstring(base64.b64decode(image), np.uint8)
     image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    #image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
     locations = face_recognition.face_locations(image, model=MODEL)
     encodings = face_recognition.face_encodings(image, locations)
 

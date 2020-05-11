@@ -44,6 +44,7 @@
     width: 9rem;
     margin:0;
     padding:0;
+    overflow: auto;
 }
 .card{
     margin-top:1rem;
@@ -76,7 +77,10 @@
     width:100%;
     
 }
-
+.card-text{
+    overflow: contain;
+    display: block;
+}
 .heroInfo{
    
 }
@@ -94,6 +98,11 @@
     padding:0;
 }
 #middle-right  .listIMG{
-    width: 10rem;
+    width: 15rem;
     float: left;
+}
+
+.btn-delete{
+    float: right;
+    margin-top: 5px;
 }

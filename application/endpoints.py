@@ -38,6 +38,7 @@ class PersonList(Resource):
             for x in data:
                 arr.append(x.serialize())
             session.close()
+            fr.initFaceRec()
             return flask.make_response(flask.jsonify({'data': arr}), 201)
 
         except Exception as e:

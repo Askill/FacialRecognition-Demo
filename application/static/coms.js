@@ -44,3 +44,16 @@ function postJSON(url, data, callback, fallback) {
     };
     xhr.send(data);
 };
+function deleteJSON(url, callback, fallback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', url, false);
+    xhr.onload = function () {
+        var status = xhr.status;
+        if (status < 400) {
+            callback(null, xhr.response);
+        } else {
+            fallback();
+        }
+    };
+    xhr.send();
+};
