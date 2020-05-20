@@ -120,5 +120,6 @@ Struktur:
 Für den Datenbankzugriff wird der ORM SQLAlchemy genutzt.  
 Es existieren Personen und Fingerabdrücke mit einer 1:N Beziehung.  
 Fingerabdrücke werden momentan ignoriert.  
+
 **Datenbankstruktur**
 ![](./images/3.png)
