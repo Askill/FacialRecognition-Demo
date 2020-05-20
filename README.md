@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-In diesem Abschnitt finden Sie alle nötigen Informationen zum schnellen Deployen der Applikation.
+In diesem Abschnitt finden Sie alle nötigen Informationen zum schnellen Deployen der Applikation.  
 
 ### Anforderungen
 
@@ -59,12 +59,27 @@ In *./application/config.py* können Sie die relevanten Parameter konfigurieren.
     tolerance       = 0.6
     useCUDA         = True 
     videoSource     = "http://192.168.178.56:8080/video" 
+    scaleInput      = 0.5
 
 Video Source kann eine Videodatei, ein live stream oder eine Webcam sein:  
 https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_gui/py_video_display/py_video_display.html#goal
 
+**Nach dem erfolgreichen Deployment sollte es wie folgt aussehen:**
+
+![./images/1.png](./images/1.png)
 
 ## Komponenten
+
+Die Applikation nutzt Client seitiges rendern mit JS Templateing.   
+Serverseitig wird nur die Grundlegende Struktur, das Gerüst sozusagen gerendert.
+
+Das Backend besteht aus 3 Komponenten:
+- Kamera
+- Server
+- Datenbank
+
+**Komponentendiagramm:**
+![](./images/2.png)
 
 ## API
 Die API ist RESTful, besitzt 2 Endpoints mit dem Präfix */api/v1*.  
@@ -102,3 +117,8 @@ Struktur:
 
 
 ## Datenstruktur  
+Für den Datenbankzugriff wird der ORM SQLAlchemy genutzt.  
+Es existieren Personen und Fingerabdrücke mit einer 1:N Beziehung.  
+Fingerabdrücke werden momentan ignoriert.  
+**Datenbankstruktur**
+![](./images/3.png)

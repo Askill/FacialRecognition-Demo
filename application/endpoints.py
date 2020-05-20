@@ -141,7 +141,7 @@ class Camera(Resource):
                 b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
     def genProcessed(self, url=None):
-        """Video streaming generator function."""
+        """Video streaming generator function for processed video."""
         url = config.videoSource
         while True:
             frame = fr.identifyFaceVideo(url).tobytes()

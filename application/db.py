@@ -13,8 +13,6 @@ connection = engine.connect()
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
-lastImage = ""
-
 class Gender(enum.Enum):
     other = "Other"
     male = "Male"
