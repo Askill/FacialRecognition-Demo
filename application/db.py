@@ -6,8 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 import enum
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
+import application.config as config
 
-engine = db.create_engine('sqlite:///./test.sqlite', echo=False)
+engine = db.create_engine('sqlite:///' + config.databaseFile, echo=config.echoDatabase)
 connection = engine.connect()
 Base = declarative_base()
 Session = sessionmaker(bind=engine)

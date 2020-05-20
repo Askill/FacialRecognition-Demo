@@ -12,7 +12,6 @@ app = Flask(__name__)
 api = Api(app, version='1', contact={"name":""}, license={"name":"Online Dienst Dokumentation"}, api_spec_url='/api/swagger')
 
 
-
 api.add_resource(endpoints.PersonList,'/api/v1/person/<string:id>', '/api/v1/person/')
 api.add_resource(endpoints.Camera,'/api/v1/camera/<string:type>', "/api/v1/camera/")
 

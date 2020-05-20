@@ -6,18 +6,18 @@ from application.db import Session, Person
 import base64
 import numpy as np
 from io import StringIO
+import application.config as config
 
-TOLERANCE = 0.6
+TOLERANCE = config.tolerance
 FRAME_THICKNESS = 3
 FONT_THICKNESS = 2
-MODEL = "cnn"  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
-
+MODEL = config.model  # default: 'hog', other one can be 'cnn' - CUDA accelerated (if available) deep-learning pretrained model
 
 known_faces = []
 known_names = []
 
 def initFaceRec():
-    dlib.DLIB_USE_CUDA=True
+    dlib.DLIB_USE_CUDA = config.useCUDA
     print('Loading known faces...', dlib.DLIB_USE_CUDA)
     session = Session()
     for face, name in session.query(Person.face, Person.person_id).all():
@@ -67,7 +67,6 @@ def identifyFaceVideo(url):
     face_locations = {} #face locations to be drawn
 
     for face_encoding, face_location in zip(encodings, locations):
-
         face_locations.update(compareFace(face_encoding, face_location))
 
     session = Session()

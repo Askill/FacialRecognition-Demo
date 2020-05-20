@@ -53,8 +53,6 @@ class PersonList(Resource):
             parser.add_argument('useFace', type=bool, required=False)
             args = parser.parse_args()
 
-            
-
             # this indicates that the captured face should be use for identification / validation
             if "useFace" in args and args["useFace"]:
                 Camera().post()
@@ -112,6 +110,7 @@ class PersonList(Resource):
             data = session.query(Person).filter_by(person_id=id).delete()
             session.commit()
             session.close()
+            fr.initFaceRec()
             return flask.make_response(flask.jsonify({'data': data}), 204)
 
         except Exception as e:
@@ -122,7 +121,7 @@ class Camera(Resource):
     # provides the function used for the live streams
     class VideoCamera(object):
         """Video stream object"""
-        url = "http://192.168.178.56:8080/video"
+        url = config.videoSource
         def __init__(self):
             self.video = cv2.VideoCapture(self.url)
 
@@ -143,7 +142,7 @@ class Camera(Resource):
 
     def genProcessed(self, url=None):
         """Video streaming generator function."""
-        url = "http://192.168.178.56:8080/video"
+        url = config.videoSource
         while True:
             frame = fr.identifyFaceVideo(url).tobytes()
             yield (b'--frame\r\n'
