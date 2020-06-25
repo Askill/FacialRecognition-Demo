@@ -10,6 +10,9 @@ In diesem Abschnitt finden Sie alle nötigen Informationen zum schnellen Deploye
  - pip (für Python 3)
 
 ### Deployment
+
+Bei einem Deployment unter Windows müssen die Visual Studio Build Tools für C/C++ installiert sein, um CMake und Dlib installieren zu können.
+
 #### ohne CUDA
 
     pip install -r requirements.txt
