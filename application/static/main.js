@@ -59,7 +59,7 @@ function snapShot(){
     postJSON(rootKontext + "/api/v1/camera/", {},         
         function (error, data) {
             
-            document.getElementById('image-left').src = rootKontext + "/api/v1/camera/still";
+            document.getElementById('image-left').src = rootKontext + "/api/v1/camera/still?" + new Date();
         },
         null
     );

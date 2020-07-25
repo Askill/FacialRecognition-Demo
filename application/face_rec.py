@@ -65,9 +65,9 @@ def identifyFace(image):
     return res
 
 def identifyFaceVideo(video):
-    video = video.video
+    video.recap()
     # allways get new latest image from url
-    image = video.read()[1]
+    image = video.video.read()[1]
     #scale
     image = cv2.resize(image,None,fx=config.scaleInput,fy=config.scaleInput)
     ret, image = cv2.imencode(".png", image)

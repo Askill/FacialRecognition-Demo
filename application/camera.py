@@ -9,16 +9,20 @@ class VideoCamera(object):
     url = config.videoSource
     
     def __init__(self):
-
-        self.video = cv2.VideoCapture(self.url, cv2.CAP_DSHOW)
-        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 720)
-        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 450)
+        if  isinstance(self.url, int):
+            self.video = cv2.VideoCapture(self.url, cv2.CAP_DSHOW)
+        else:
+            self.video = cv2.VideoCapture(self.url)
 
     def __del__(self):
         self.video.release()
     
-    def get_frame(self, ending):
+    def recap(self):
+        
+        self.video = cv2.VideoCapture(self.url)
 
+    def get_frame(self, ending):
+        self.recap()
         success, image = self.video.read()
         if image is None:
             image = np.zeros((100,100,3), np.uint8)
