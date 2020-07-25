@@ -111,18 +111,6 @@ function validate(){
     );
 }
 
-function loadStream() {
-    string = `
-    <img src="${rootKontext + "/api/v1/camera/stream"}" id="image-left"> </img>
-    `
-    ml.innerHTML += string;
-
-    string = `
-    <img src="${rootKontext + "/api/v1/camera/still"}" id="image-right"> </img>
-    `
-    mr.innerHTML += string;
-}
-
 function loadData() {
     getJSON(rootKontext + "/api/v1/person/",
         function (error, data) {

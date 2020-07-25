@@ -7,7 +7,12 @@ import cv2
 import base64
 from application.db import Session, Person, Fingerprint
 import application.face_rec as fr
-lastImage = ""
+
+import application.camera as cam
+
+lastImage = None
+video = cv2.VideoCapture(config.videoSource, cv2.CAP_DSHOW)
+vidCam = cam.VideoCamera()
 
 class PersonList(Resource):
     def post(self, id = None):
@@ -38,7 +43,10 @@ class PersonList(Resource):
             for x in data:
                 arr.append(x.serialize())
             session.close()
+
             fr.initFaceRec()
+
+
             return flask.make_response(flask.jsonify({'data': arr}), 201)
 
         except Exception as e:
@@ -118,43 +126,34 @@ class PersonList(Resource):
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)
 
 class Camera(Resource):
-    # provides the function used for the live streams
-    class VideoCamera(object):
-        """Video stream object"""
-        url = config.videoSource
-        def __init__(self):
-            self.video = cv2.VideoCapture(self.url)
-
-        def __del__(self):
-            self.video.release()
-        
-        def get_frame(self, ending):
-            success, image = self.video.read()
-            ret, jpeg = cv2.imencode(ending, image)
-            return jpeg
 
     def gen(self, camera):
         """Video streaming generator function."""
+
         while True:
             frame = camera.get_frame('.jpg').tobytes()
             yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        b'Content-Type:image/jpeg\r\n'
+        b'Content-Length: ' + f"{len(frame)}".encode() + b'\r\n'
+        b'\r\n' + frame + b'\r\n')
 
-    def genProcessed(self, url=None):
+    def genProcessed(self, cam):
         """Video streaming generator function for processed video."""
-        url = config.videoSource
         while True:
-            frame = fr.identifyFaceVideo(url).tobytes()
+            frame = fr.identifyFaceVideo(cam).tobytes()
             yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        b'Content-Type:image/jpeg\r\n'
+        b'Content-Length: ' + f"{len(frame)}".encode() + b'\r\n'
+        b'\r\n' + frame + b'\r\n')
 
     def get(self, type = "stream"):
         global lastImage
+        global vidCam
         try:
             if type == "stream":
-                return flask.Response(self.gen(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+                return flask.Response(self.gen(vidCam), mimetype='multipart/x-mixed-replace; boundary=frame')
             elif type == "processed":
-                return flask.Response(self.genProcessed(self.VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+                return flask.Response(self.genProcessed(vidCam), mimetype='multipart/x-mixed-replace; boundary=frame')
             elif type == "still":
                 return flask.Response(base64.b64decode(lastImage),  mimetype='image/png')
 
@@ -165,8 +164,9 @@ class Camera(Resource):
 
     def post(self):
         global lastImage
+        global vidCam
         try:
-            lastImage = base64.b64encode(self.VideoCamera().get_frame('.png'))
+            lastImage = base64.b64encode(vidCam.get_frame('.png'))
         except Exception as e:
             print("error: -", e)
             return flask.make_response(flask.jsonify({'error': str(e)}), 404)

@@ -16,47 +16,57 @@ MODEL = config.model  # default: 'hog', other one can be 'cnn' - CUDA accelerate
 known_faces = []
 known_names = []
 
-def initFaceRec():
+def initFaceRec() :
     ''' Initializes Facial recognition with faces in current db  '''
 
-    dlib.DLIB_USE_CUDA = config.useCUDA
-    print('LOADING known faces...', dlib.DLIB_USE_CUDA)
+    print('LOADING known faces...')
     session = Session()
     for face, name in session.query(Person.face, Person.person_id).all():
-            # Load an image
-            nparr = np.fromstring(base64.b64decode(face), np.uint8)
-            image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            
-            # Get 128-dimension face encoding
+        # Load an image
+        nparr = np.fromstring(base64.b64decode(face), np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Get 128-dimension face encoding
+        encoding = face_recognition.face_encodings(image)
+        if len(encoding) >= 1:
             encoding = face_recognition.face_encodings(image)[0]
+        else:
+            continue
 
-            # Append encodings and name
-            known_faces.append(encoding)
-            known_names.append(name)
+        # Append encodings and name
+        known_faces.append(encoding)
+        known_names.append(name)
+
 
     print('DONE Loading known faces...')
     session.close()
 
 def identifyFace(image):
     print('Identifying Face')
-    nparr = np.fromstring(base64.b64decode(image), np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-    locations = face_recognition.face_locations(image, model=MODEL)
-    encodings = face_recognition.face_encodings(image, locations)
-
-    # res is the return object key: name, value: matching score
     res = {}
-    for face_encoding, face_location in zip(encodings, locations):
-        results = face_recognition.face_distance(known_faces, face_encoding)
-        res = {known_names[i]: results[i] for i in range(0, len(results)) }
-    
+    try:
+        nparr = np.fromstring(base64.b64decode(image), np.uint8)
+        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        locations = face_recognition.face_locations(image, model=MODEL)
+        encodings = face_recognition.face_encodings(image, locations)
+
+        # res is the return object key: name, value: matching score
+        
+        count = 0
+        for face_encoding, face_location in zip(encodings, locations):
+            
+            results = face_recognition.face_distance(known_faces, face_encoding)
+            res = {known_names[i]: results[i] for i in range(0, len(results)) }
+            count += 1
+            print(count)
+    except:
+        print("error")
     return res
 
-def identifyFaceVideo(url):
-    
+def identifyFaceVideo(video):
+    video = video.video
     # allways get new latest image from url
-    video = cv2.VideoCapture(url)
     image = video.read()[1]
     #scale
     image = cv2.resize(image,None,fx=config.scaleInput,fy=config.scaleInput)
@@ -74,16 +84,22 @@ def identifyFaceVideo(url):
     # can be multithreaded here
     # compares each face against all faces in DB
     for face_encoding, face_location in zip(encodings, locations):
-        face_locations.update(compareFace(face_encoding, face_location))
+        try:
+            face_locations.update(compareFace(face_encoding, face_location))
+        except Exception as e:
+            print(e)
 
     session = Session()
     # marks faces and retrives faces by id
     for k, v in face_locations.items():
-        # Paint frame
-        cv2.rectangle(image, v[0], v[1], [255, 0, 0], FRAME_THICKNESS)
-        # Wite a name
-        name = " ".join(session.query(Person.fname, Person.lname).filter(Person.person_id == int(k)).first())
-        cv2.putText(image, name, v[0], cv2.FONT_HERSHEY_SIMPLEX, 1.5, [255, 0, 255], FONT_THICKNESS)
+        try:
+            # Paint frame
+            cv2.rectangle(image, v[0], v[1], [255, 0, 0], FRAME_THICKNESS)
+            # Wite a name
+            name = " ".join(session.query(Person.fname, Person.lname).filter(Person.person_id == int(k)).first())
+            cv2.putText(image, name, v[0], cv2.FONT_HERSHEY_SIMPLEX, 1.5, [255, 0, 255], FONT_THICKNESS)
+        except Exception as e:
+            print(e)
     session.close()
     image = cv2.imencode(".jpg", image)[1]
     return image
